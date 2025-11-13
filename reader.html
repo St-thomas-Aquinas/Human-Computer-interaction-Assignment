@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebRead | Reader</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="light-mode">
+  <header>
+    <h1>Ember 🔥</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="library.html">Library</a>
+      <a href="reader.html" class="active">Reader</a>
+    </nav>
+  </header>
+
+  <section class="reader">
+    <div class="controls">
+      <button onclick="changeFontSize(1)">A+</button>
+      <button onclick="changeFontSize(-1)">A-</button>
+
+      <!-- Theme buttons -->
+      <button class="light-btn" onclick="setTheme('light-mode')">☀️ Light</button>
+      <button class="dark-btn" onclick="setTheme('dark-mode')">🌙 Dark</button>
+      <button class="warm-btn" onclick="setTheme('warm-mode')">🌅 Warm</button>
+
+      <button onclick="readAloud()">🔊 Read Aloud</button>
+    </div>
+
+    <div id="book-content">
+      <h2>The Silent River</h2>
+      <p>
+        The river flowed gently through the valley, whispering stories to the
+        trees that lined its banks. Each ripple carried the memory of ages long
+        forgotten. The villagers came to its edge every morning, listening to
+        the quiet song of water against stone. For some, it was peace; for
+        others, it was a reminder of time slipping away like water through open
+        fingers.
+      </p>
+      <p>
+        On the far side of the river stood an ancient bridge — moss-covered,
+        patient, and wise. It had seen countless travelers cross with hope in
+        their hearts and burdens on their backs. The Silent River never stopped
+        flowing, and the bridge never stopped watching.
+      </p>
+    </div>
+
+    <!-- Progress bar -->
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
+  </section>
+
+  
+  <script>
+    // === Font size control ===
+    let fontSize = 18;
+    function changeFontSize(change) {
+      fontSize += change;
+      document.getElementById("book-content").style.fontSize = fontSize + "px";
+    }
+
+    // === Theme switching ===
+    function setTheme(theme) {
+      document.body.className = theme;
+      localStorage.setItem("theme", theme); // save user preference
+    }
+
+    // Load saved theme on reload
+    window.onload = function() {
+      const savedTheme = localStorage.getItem("theme") || "light-mode";
+      document.body.className = savedTheme;
+    }
+
+    // === Text-to-speech ===
+    function readAloud() {
+      const text = document.getElementById("book-content").innerText;
+      const speech = new SpeechSynthesisUtterance(text);
+      speech.lang = "en-US";
+      speech.rate = 1;
+      window.speechSynthesis.speak(speech);
+    }
+
+    // === Scroll progress bar ===
+    window.addEventListener("scroll", () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      document.getElementById("progress-bar").style.width = scrollPercent + "%";
+    });
+  </script>
+</body>
+</html>
